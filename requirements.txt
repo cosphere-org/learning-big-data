@@ -5,12 +5,16 @@ pyspark==2.3.1
 # -- notebook environment
 jupyter==1.0.0
 
-# -- asci table for nice printing 
+# -- asci table for nice printing
 texttable==1.4.0
 
 # -- dataframe library
 pandas==0.23.4
 
-# -- measure memory footprint 
+# -- measure memory footprint
 memory-profiler==0.54.0
 
+# -- for tracking progress for the long lasting process like uploading
+# -- to docker registry
+# DOCS: https://github.com/tqdm/tqdm
+tqdm==4.25.0
