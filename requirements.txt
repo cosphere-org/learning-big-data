@@ -18,3 +18,12 @@ memory-profiler==0.54.0
 # -- to docker registry
 # DOCS: https://github.com/tqdm/tqdm
 tqdm==4.25.0
+
+# -- for rendering on demand fake data
+Faker==0.9.0
+
+# -- HTTP client for humans
+requests==2.19.1
+
+# -- easy parsing of xml records
+xmltodict==0.11.0
