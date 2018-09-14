@@ -12,6 +12,14 @@ It focuses on:
 * spark (pyspark)
 * ... many more (this list will be growing)
 
+### Running a slides
+
+```bash
+
+jupyter nbconvert <notebook_path> --to slides --post serve
+
+```
+
 ## Sections
 
 This repository is composed of multiple sections where each one of them has some particular goal defined.

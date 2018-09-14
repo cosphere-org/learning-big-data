@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 
-<title>overview slides</title>
+<title>explore_stackoverflow_badges slides</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13242,107 +13242,280 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="What-Big-Data-means-to-you?">What Big Data means to you?<a class="anchor-link" href="#What-Big-Data-means-to-you?">&#182;</a></h1>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>let's write down some of your expectations, buzz words etc.</p>
+<h1 id="Fetch-and-process-data-using-Jupyter-Notebook">Fetch and process data using Jupyter Notebook<a class="anchor-link" href="#Fetch-and-process-data-using-Jupyter-Notebook">&#182;</a></h1><p>Jupyter Notebook - multi-lingual environment for making things done</p>
 
 </div>
 </div>
 </div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="How-does-it-feel-to-work-with-Big-Data?">How does it feel to work with Big Data?<a class="anchor-link" href="#How-does-it-feel-to-work-with-Big-Data?">&#182;</a></h1>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">xmltodict</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
+
 </div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>let's explore notebook: <code>/notebooks/learning_big_data/big_data_hello_world/big_data_hello_world.ipynb</code></p>
+<h1 id="Fetching-Badge-Data">Fetching Badge Data<a class="anchor-link" href="#Fetching-Badge-Data">&#182;</a></h1><p>SOURCE: <a href="https://archive.org/download/stackexchange">https://archive.org/download/stackexchange</a></p>
+<p>DATA EXPLORER: <a href="http://data.stackexchange.com/stackoverflow/queries">http://data.stackexchange.com/stackoverflow/queries</a> (<a href="https://github.com/StackExchange/StackExchange.DataExplorer">https://github.com/StackExchange/StackExchange.DataExplorer</a>)</p>
+<p>Stackoverflow badge data were split into chunk files of size approx 12 MB (each containing around 100k badge rows). They are all accessible via the <code>https://s3.eu-central-1.amazonaws.com/learning.big.data/stackoverflow-badges/&lt;i&gt;.xml</code> where <code>i</code> takes values from <code>0</code> to <code>286</code> to more than 3 GB of data.</p>
 
 </div>
 </div>
 </div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="General-Big-Data-Engine">General Big Data Engine<a class="anchor-link" href="#General-Big-Data-Engine">&#182;</a></h1>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>%%bash
+cat tools/download_and_chunks_badges.sh
+</pre></div>
+
+    </div>
 </div>
 </div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="./assets/general_big_data_engine.png" alt="general_big_data_engine"></p>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>#!/bin/bash
+
+TEMP_DIR=$(mktemp -d)
+cd $TEMP_DIR
+
+echo &#34;&gt;&gt; DOWNLOADING BADGES&#34;
+wget https://archive.org/download/stackexchange/stackoverflow.com-Badges.7z
+
+echo &#34;&gt;&gt; EXTRACTING BADGES&#34;
+dtrx -o -n stackoverflow.com-Badges.7z
+
+# -- remove last and 1st two lines
+cd stackoverflow.com-Badges
+echo &#34;&gt;&gt; CLEAN BADGES&#34;
+sed &#39;$ d&#39; Badges.xml &gt; TempBadges.xml
+sed &#39;1,2d&#39; TempBadges.xml &gt; Badges.xml
+
+# -- split into manageable chunks
+echo &#34;&gt;&gt; SPLIT BADGES&#34;
+split --lines 100000 --additional-suffix=.xml Badges.xml
+
+# -- remove temporary stuff
+echo &#34;&gt;&gt; CLEAN ARTEFACTS&#34;
+cd ..
+rm stackoverflow.com-Badges/TempBadges.xml stackoverflow.com-Badges/Badges.xml stackoverflow.com-Badges.7z
+
+echo &#34;files saved in ${TEMP_DIR}&#34;
+</pre>
+</div>
+</div>
 
 </div>
 </div>
+
 </div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Map-Reduce-anatomy">Map Reduce anatomy<a class="anchor-link" href="#Map-Reduce-anatomy">&#182;</a></h1>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># -- rename files to prepare them for the S3 upload</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;/tmp/tmp.gEG1iKNNPu/stackoverflow.com-Badges/*.xml&#39;</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">))</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>        
+        <span class="n">numerical_path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([a-z]+)\.xml&#39;</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{i}</span><span class="s1">.xml&#39;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">numerical_path</span><span class="p">)</span>        
+</pre></div>
+
+    </div>
 </div>
 </div>
+
 </div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="./assets/map_reduce_anatomy.png" alt="map_reduce_anatomy"></p>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># use s3cmd for uploading</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div></section></section><section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="s1">&#39;https://s3.eu-central-1.amazonaws.com/learning.big.data/stackoverflow-badges/0.xml&#39;</span><span class="p">,</span> 
+    <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">badges</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_lines</span><span class="p">():</span>
+
+    <span class="c1"># -- filter out keep-alive new lines</span>
+    <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+        <span class="n">badges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))[</span><span class="s1">&#39;row&#39;</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div></section></section><section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">badges</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[8]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>100000</pre>
+</div>
+
+</div>
 
 </div>
 </div>
+
 </div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Map-Task">Map Task<a class="anchor-link" href="#Map-Task">&#182;</a></h1>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">badges</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="./assets/map_reduce_map_task_anatomy.png" alt="map_reduce_map_task_anatomy.png"></p>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[{&#39;@Id&#39;: &#39;26066242&#39;,
+  &#39;@UserId&#39;: &#39;8125167&#39;,
+  &#39;@Name&#39;: &#39;Supporter&#39;,
+  &#39;@Date&#39;: &#39;2017-11-28T19:34:25.047&#39;,
+  &#39;@Class&#39;: &#39;3&#39;,
+  &#39;@TagBased&#39;: &#39;False&#39;},
+ {&#39;@Id&#39;: &#39;26066243&#39;,
+  &#39;@UserId&#39;: &#39;9006638&#39;,
+  &#39;@Name&#39;: &#39;Supporter&#39;,
+  &#39;@Date&#39;: &#39;2017-11-28T19:34:25.047&#39;,
+  &#39;@Class&#39;: &#39;3&#39;,
+  &#39;@TagBased&#39;: &#39;False&#39;}]</pre>
+</div>
+
+</div>
 
 </div>
 </div>
+
 </div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Reduce-Task">Reduce Task<a class="anchor-link" href="#Reduce-Task">&#182;</a></h1>
+<h2 id="What-Badge-Names-do-we-have?">What Badge Names do we have?<a class="anchor-link" href="#What-Badge-Names-do-we-have?">&#182;</a></h2>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="./assets/map_reduce_reduce_task_anatomy.png" alt="map_reduce_reduce_task_anatomy"></p>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">badge</span> <span class="ow">in</span> <span class="n">badges</span><span class="p">:</span>
+    <span class="n">counts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">badge</span><span class="p">[</span><span class="s1">&#39;@Name&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">counts</span><span class="p">[</span><span class="n">badge</span><span class="p">[</span><span class="s1">&#39;@Name&#39;</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[15]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(&#39;Popular Question&#39;, 14687),
+ (&#39;Informed&#39;, 9557),
+ (&#39;Notable Question&#39;, 7466),
+ (&#39;Editor&#39;, 7230),
+ (&#39;Yearling&#39;, 5903),
+ (&#39;Student&#39;, 5782),
+ (&#39;Scholar&#39;, 4900),
+ (&#39;Custodian&#39;, 4357),
+ (&#39;Nice Answer&#39;, 3570),
+ (&#39;Teacher&#39;, 3568)]</pre>
+</div>
+
+</div>
 
 </div>
 </div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Formats---Parquet">Formats - Parquet<a class="anchor-link" href="#Formats---Parquet">&#182;</a></h1>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="./assets/parquet_simple_architecture.png" alt="parquet_simple_architecture.png"></p>
 
-</div>
-</div>
 </div></section></section>
 </div>
 </div>
