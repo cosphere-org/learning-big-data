@@ -1,7 +1,4 @@
 
-# -- python binding to spark processing engine
-pyspark==2.3.1
-
 # -- notebook environment
 jupyter==1.0.0
 
@@ -27,3 +24,14 @@ requests==2.19.1
 
 # -- easy parsing of xml records
 xmltodict==0.11.0
+
+# -- enable py.test inside jupyter notebook
+# DOCS: https://github.com/chmp/ipytest
+ipytest==0.3.0
+
+# -- allows test driven work on algorithm by enabling rich tests running
+# -- and inspecting capabilities
+pytest==3.8.2
+
+# -- allows one to run job on many cores
+joblib==0.12.5

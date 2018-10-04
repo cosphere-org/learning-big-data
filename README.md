@@ -12,6 +12,13 @@ It focuses on:
 * spark (pyspark)
 * ... many more (this list will be growing)
 
+### Running Jupyter Notebook Server
+
+```bash
+make start_jupyter_notebook
+
+```
+
 ### Running a slides
 
 ```bash

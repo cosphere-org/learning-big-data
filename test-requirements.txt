@@ -1,0 +1,13 @@
+
+# -- provides injectable mocker fixture
+pytest-mock==0.10.1
+
+# -- allows specifying python project path to be discovered
+pytest-pythonpath==0.7.1
+
+# -- provides coverage measurements
+pytest-cov==2.5.1
+
+# -- human friendly testing of http requests to external APIs
+# DOCS: https://httpretty.readthedocs.io/en/latest/
+httpretty==0.9.5
