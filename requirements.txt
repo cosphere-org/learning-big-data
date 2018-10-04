@@ -35,3 +35,6 @@ pytest==3.8.2
 
 # -- allows one to run job on many cores
 joblib==0.12.5
+
+# -- magical parsing of datetimes
+Delorean==1.0.0
