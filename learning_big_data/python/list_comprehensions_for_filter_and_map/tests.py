@@ -1,5 +1,6 @@
 
-from answer import filter_elements, map_elements
+# from answer import filter_elements, map_elements
+from exercise import filter_elements, map_elements
 
 
 def test_filter_elements():

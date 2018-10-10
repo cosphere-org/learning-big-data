@@ -1,6 +1,6 @@
 
-from code_exercise import bytes_to_str, str_to_bytes
-# from code_answer import bytes_to_str, str_to_bytes
+from exercise import bytes_to_str, str_to_bytes
+# from answer import bytes_to_str, str_to_bytes
 
 
 def test_bytes_to_str():

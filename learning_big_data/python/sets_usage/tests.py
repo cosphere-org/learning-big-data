@@ -1,6 +1,6 @@
 
-from code_exercise import find_unique, equal_no_matter_order, unique_intersection, unique_union, unique_diff
-# from code_answer import find_unique, equal_no_matter_order, unique_intersection, unique_union, unique_diff
+from exercise import find_unique, equal_no_matter_order, unique_intersection, unique_union, unique_diff
+# from answer import find_unique, equal_no_matter_order, unique_intersection, unique_union, unique_diff
 
 
 def test_find_unique():
