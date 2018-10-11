@@ -38,3 +38,7 @@ joblib==0.12.5
 
 # -- magical parsing of datetimes
 Delorean==1.0.0
+
+# -- MapReduce framework to work on top of google dataproc, hadoop etc.
+# DOCS: https://pythonhosted.org/mrjob/index.html
+mrjob==0.6.5
