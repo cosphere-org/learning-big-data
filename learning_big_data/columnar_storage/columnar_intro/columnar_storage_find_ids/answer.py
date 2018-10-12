@@ -1,5 +1,3 @@
-%%file exercise.py
-
 import json
 
 def find_ids(path, column_name, value):
