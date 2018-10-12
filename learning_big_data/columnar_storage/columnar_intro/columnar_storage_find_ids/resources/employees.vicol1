@@ -1,0 +1,2 @@
+{"columns": {"first_name": {"start": 0, "end": 65}, "last_name": {"start": 65, "end": 135}, "department": {"start": 135, "end": 214}, "salary": {"start": 214, "end": 270}, "age": {"start": 270, "end": 299}}}
+Cindy,Manuel,Elizabeth,Betty,Michael,Grace,Julia,Donna,Billy,ToddKlein,Gross,Garcia,Johnson,Davis,Thomas,Carter,Fitzgerald,Lang,EverettBigData,Embedded,Embedded,Embedded,BigData,HR,BigData,Embedded,BigData,Embedded16955,21162,4760,13358,9431,21236,17512,14909,24312,789523,21,43,29,34,37,33,25,33,44
