@@ -42,3 +42,11 @@ Delorean==1.0.0
 # -- MapReduce framework to work on top of google dataproc, hadoop etc.
 # DOCS: https://pythonhosted.org/mrjob/index.html
 mrjob==0.6.5
+
+# -- Bloom filter implementation together with its Scalable version
+# DOCS: https://github.com/joseph-fox/python-bloomfilter
+pybloom-live==3.0.0
+
+# -- MurMurHash v3 for quick not-cryptographic hashes
+# DOCS: https://github.com/hajimes/mmh3
+mmh3==2.5.1
