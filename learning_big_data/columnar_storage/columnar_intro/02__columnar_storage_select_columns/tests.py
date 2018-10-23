@@ -1,6 +1,6 @@
 
-from exercise import select_columns
-# from answer import find_ids
+# from exercise import select_columns
+from answer import select_columns
 
 
 def test_select_columns_one_id():

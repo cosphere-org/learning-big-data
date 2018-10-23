@@ -1,6 +1,6 @@
 
-# from answer import lazy_square, lazy_element_sum, lazy_find
-from exercise import lazy_square, lazy_element_sum, lazy_find
+from answer import lazy_square, lazy_element_sum, lazy_find
+# from exercise import lazy_square, lazy_element_sum, lazy_find
 
 
 def test_lazy_square():
