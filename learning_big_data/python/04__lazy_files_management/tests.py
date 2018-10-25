@@ -1,6 +1,6 @@
 
-# from answer import find_offset, read_between
-from exercise import find_offset, read_between
+from answer import find_offset, read_between
+# from exercise import find_offset, read_between
 
 
 def test_find_offset():

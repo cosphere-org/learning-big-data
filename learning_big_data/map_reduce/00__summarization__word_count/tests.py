@@ -1,6 +1,6 @@
 
-from exercise import WordCountJob
-# from answer import WordCountJob
+# from exercise import WordCountJob
+from answer import WordCountJob
 
 
 def test_job():

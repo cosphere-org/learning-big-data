@@ -1,6 +1,6 @@
 
-from exercise import read_column
-# from answer import read_column
+# from exercise import read_column
+from answer import read_column
 
 
 def test_read_column_big_data_deps():
