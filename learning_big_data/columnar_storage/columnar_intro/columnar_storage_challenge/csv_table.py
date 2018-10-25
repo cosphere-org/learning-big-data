@@ -50,3 +50,6 @@ class CsvTable:
         print_table(
             self.columns, 
             [[row[column] for column in self.columns] for row in self.rows])
+        
+    def collect_silent(self):        
+        pass
