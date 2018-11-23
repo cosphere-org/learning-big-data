@@ -50,3 +50,12 @@ pybloom-live==3.0.0
 # -- MurMurHash v3 for quick not-cryptographic hashes
 # DOCS: https://github.com/hajimes/mmh3
 mmh3==2.5.1
+
+# -- primary plotting library
+matplotlib==3.0.2
+
+# -- graphical enhancement of matplotlib capabilities
+seaborn==0.9.0
+
+# -- for distributed numpy and pandas
+dask==0.20.2
